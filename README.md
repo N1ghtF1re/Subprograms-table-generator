@@ -4,6 +4,8 @@ A real revolution in the world of writing reports!
 
 Tired of manually filling the table with subroutines, spending a huge amount of time on this ?! Do you want to fill in the description of the subroutine and its parameters? The program is created specially for you!
 
+In addition, the program generates a description for subprograms whose purpose is known
+
 How to use
 --------------------
 + Paste your code into the text box on the left. 
