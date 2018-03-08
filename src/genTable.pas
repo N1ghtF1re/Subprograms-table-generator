@@ -4,8 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,ComObj,
-  Vcl.ExtCtrls, Vcl.Menus, ShellAPI;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,ComObj, pngimage,
+  Vcl.ExtCtrls, Vcl.Menus, ShellAPI,SplashScreen;
 
 type
   TTableGenForm = class(TForm)
@@ -21,6 +21,7 @@ type
     mnSupport: TMenuItem;
     mniConver: TMenuItem;
     mnToExcel: TMenuItem;
+    ImgIntro: TImage;
     procedure btnToExcelClick(Sender: TObject);
     procedure btnGenTableClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -31,6 +32,7 @@ type
     procedure mnClearClick(Sender: TObject);
     procedure mnSupportClick(Sender: TObject);
   private
+    splash: TSplash;
       function GetExcelFileName: String;
   public
     { Public declarations }
@@ -210,8 +212,17 @@ begin
 end;
 
 procedure TTableGenForm.FormCreate(Sender: TObject);
+var 
+  png: TPngImage;
 begin
   isOk := false;
+  png:= TPngImage(ImgIntro.Picture);
+  Splash := TSplash.Create(png);
+  Splash.Show(true);
+
+   Sleep(2000);
+
+  Splash.Close;
 end;
 
 end.
