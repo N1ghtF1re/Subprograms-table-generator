@@ -2,7 +2,7 @@ object TableGenForm: TTableGenForm
   Left = 0
   Top = 0
   Caption = #1043#1077#1085#1077#1088#1072#1094#1080#1103' '#1090#1072#1073#1083#1080#1094#1099' '#1087#1086#1076#1087#1088#1086#1075#1088#1072#1084#1084
-  ClientHeight = 449
+  ClientHeight = 389
   ClientWidth = 715
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,6 +14,7 @@ object TableGenForm: TTableGenForm
   OldCreateOrder = False
   OnCanResize = FormCanResize
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object ImgIntro: TImage
@@ -3126,7 +3127,7 @@ object TableGenForm: TTableGenForm
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 368
+    Top = 308
     Width = 715
     Height = 81
     Align = alBottom
@@ -3183,5 +3184,22 @@ object TableGenForm: TTableGenForm
       Caption = #1055#1086#1076#1076#1077#1088#1078#1072#1090#1100
       OnClick = mnSupportClick
     end
+  end
+  object IdHTTP1: TIdHTTP
+    AllowCookies = True
+    ProxyParams.BasicAuthentication = False
+    ProxyParams.ProxyPort = 0
+    Request.ContentLength = -1
+    Request.ContentRangeEnd = -1
+    Request.ContentRangeStart = -1
+    Request.ContentRangeInstanceLength = -1
+    Request.Accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    Request.BasicAuthentication = False
+    Request.UserAgent = 'Mozilla/3.0 (compatible; Indy Library)'
+    Request.Ranges.Units = 'bytes'
+    Request.Ranges = <>
+    HTTPOptions = [hoForceEncodeParams]
+    Left = 184
+    Top = 56
   end
 end

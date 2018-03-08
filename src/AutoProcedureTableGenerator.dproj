@@ -103,6 +103,13 @@
             <Form>TableGenForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="lib\blcksock.pas"/>
+        <DCCReference Include="lib\synafpc.pas"/>
+        <DCCReference Include="lib\synsock.pas"/>
+        <DCCReference Include="lib\synautil.pas"/>
+        <DCCReference Include="lib\synacode.pas"/>
+        <DCCReference Include="lib\synaip.pas"/>
+        <DCCReference Include="lib\httpsend.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -125,6 +132,13 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="3">
+                <DeployFile LocalName="Icon.png" Configuration="Debug" Class="UWP_DelphiLogo150">
+                    <Platform Name="Win32">
+                        <RemoteDir>Assets\</RemoteDir>
+                        <RemoteName>Logo150x150.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Win32\Debug\AutoProcedureTableGenerator.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>AutoProcedureTableGenerator.exe</RemoteName>

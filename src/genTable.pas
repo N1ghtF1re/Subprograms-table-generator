@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,ComObj, pngimage,
-  Vcl.ExtCtrls, Vcl.Menus, ShellAPI,SplashScreen;
+  Vcl.ExtCtrls, Vcl.Menus, ShellAPI,SplashScreen, IdHTTP, IdBaseComponent,
+  IdComponent, IdTCPConnection, IdTCPClient, NewVersion;
 
 type
   TTableGenForm = class(TForm)
@@ -22,6 +23,7 @@ type
     mniConver: TMenuItem;
     mnToExcel: TMenuItem;
     ImgIntro: TImage;
+    IdHTTP1: TIdHTTP;
     procedure btnToExcelClick(Sender: TObject);
     procedure btnGenTableClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -31,11 +33,13 @@ type
     procedure mnToExcelClick(Sender: TObject);
     procedure mnClearClick(Sender: TObject);
     procedure mnSupportClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     splash: TSplash;
       function GetExcelFileName: String;
   public
-    { Public declarations }
+    version: String;
+    HTMLtext:String;
   end;
 
 var
@@ -44,8 +48,6 @@ var
 implementation
 
 {$R *.dfm}
-
-
 
 const
   EXCEL_FILE_EXT = '.xlsx';
@@ -219,10 +221,25 @@ begin
   png:= TPngImage(ImgIntro.Picture);
   Splash := TSplash.Create(png);
   Splash.Show(true);
-
-   Sleep(2000);
-
+  HTMLtext := IDHttp1.Get('http://pankratiew.info/TPG_vers.brakh');
+  Sleep(2000);
   Splash.Close;
+
+
+end;
+
+procedure TTableGenForm.FormShow(Sender: TObject);
+begin
+  version:='1.1';
+  if ( (Pos(version,HTMLtext)<>0) or (HTMLtext = ''))  then
+  begin
+
+  end
+  else
+  begin
+    Application.CreateForm(TFormVers, FormVers);
+    FormVers.ShowModal;
+  end;
 end;
 
 end.

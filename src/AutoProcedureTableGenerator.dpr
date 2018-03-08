@@ -3,7 +3,6 @@ program AutoProcedureTableGenerator;
 uses
   Vcl.Forms,
   genTable in 'genTable.pas' {TableGenForm};
-
 {$R *.res}
 
 begin
