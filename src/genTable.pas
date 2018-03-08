@@ -84,6 +84,8 @@ begin
   StringGrid1.Cells[0,0] := 'Имя подпрограммы';
   StringGrid1.Cells[1,0] := 'Описание';
   StringGrid1.Cells[2,0] := 'Заголовок подпрограммы';
+  StringGrid1.Cells[3,0] := 'Имя параметра';
+  StringGrid1.Cells[4,0] := 'Назначение параметра';
   for I := 0 to memoInpCode.Lines.Count-1 do
   begin
     if pos('implementation', memoInpCode.Lines[i]) > 0 then
@@ -152,8 +154,8 @@ procedure TTableGenForm.FormCanResize(Sender: TObject; var NewWidth,
 begin
   memoInpCode.Width := TableGenForm.Width div 2;
   StringGrid1.Left := memoInpCode.Width;
-  StringGrid1.Width := TableGenForm.Width div 2;
-  StringGrid1.DefaultColWidth := StringGrid1.Width div 3;
+  StringGrid1.Width := TableGenForm.Width div 2 - 15;
+  StringGrid1.DefaultColWidth := StringGrid1.Width div 3 - 12;
   memoinpcode.Height := TableGenForm.Height - pnlBottom.Height - 20;
   StringGrid1.Height := memoInpCode.Height;
   btnGenTable.Width := memoInpCode.Width;

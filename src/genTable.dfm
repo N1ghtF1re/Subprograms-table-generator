@@ -20,6 +20,7 @@ object TableGenForm: TTableGenForm
     Top = 0
     Width = 353
     Height = 368
+    ScrollBars = ssVertical
     TabOrder = 0
   end
   object StringGrid1: TStringGrid
@@ -27,12 +28,24 @@ object TableGenForm: TTableGenForm
     Top = 0
     Width = 363
     Height = 449
-    ColCount = 3
     DoubleBuffered = False
     FixedCols = 0
     FixedRows = 0
     ParentDoubleBuffered = False
+    ScrollBars = ssVertical
     TabOrder = 1
+    ColWidths = (
+      64
+      64
+      64
+      64
+      64)
+    RowHeights = (
+      24
+      24
+      24
+      24
+      24)
   end
   object pnlBottom: TPanel
     Left = 0
