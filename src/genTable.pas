@@ -126,16 +126,16 @@ begin
     begin
       isOk := true;
     end;
-    memoInpCode.Lines[i] := trim(memoInpCode.Lines[i]);
-    b1 := pos('PROCEDURE',AnsiUpperCase(memoInpCode.Lines[i]));
-    b2 := pos('FUNCTION', AnsiUpperCase(memoInpCode.Lines[i]));
+    curr := trim(memoInpCode.Lines[i]);
+    b1 := pos('PROCEDURE',AnsiUpperCase(curr));
+    b2 := pos('FUNCTION', AnsiUpperCase(curr));
 
     if isOk and
+    (
     ( b1 > 0)
     or
-    (b2 > 0) then
+    (b2 > 0)) then
     begin      
-      curr:=  memoInpCode.Lines[i];
 
       if (b1 > 1) or (b2 > 1) then
       begin
