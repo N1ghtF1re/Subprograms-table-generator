@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,ComObj,
-  Vcl.ExtCtrls;
+  Vcl.ExtCtrls, Vcl.Menus, ShellAPI;
 
 type
   TTableGenForm = class(TForm)
@@ -15,11 +15,21 @@ type
     btnGenTable: TButton;
     pnlBottom: TPanel;
     SaveDialog1: TSaveDialog;
+    MainMenu1: TMainMenu;
+    mnFile: TMenuItem;
+    mnClear: TMenuItem;
+    mnSupport: TMenuItem;
+    mniConver: TMenuItem;
+    mnToExcel: TMenuItem;
     procedure btnToExcelClick(Sender: TObject);
     procedure btnGenTableClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
       var Resize: Boolean);
+    procedure mniConverClick(Sender: TObject);
+    procedure mnToExcelClick(Sender: TObject);
+    procedure mnClearClick(Sender: TObject);
+    procedure mnSupportClick(Sender: TObject);
   private
       function GetExcelFileName: String;
   public
@@ -47,6 +57,27 @@ begin
     Result := Result + EXCEL_FILE_EXT;
 end;
 
+
+procedure TTableGenForm.mnClearClick(Sender: TObject);
+begin
+  memoInpCode.Clear;
+end;
+
+procedure TTableGenForm.mniConverClick(Sender: TObject);
+begin
+  btnGenTable.Click;
+end;
+
+
+procedure TTableGenForm.mnSupportClick(Sender: TObject);
+begin
+   ShellExecute(Application.Handle, nil, 'https://vk.com/@brakhmen-podderzhat-brakhmen-corparation', nil, nil,SW_SHOWNOACTIVATE);
+end;
+
+procedure TTableGenForm.mnToExcelClick(Sender: TObject);
+begin
+  btnToExcel.Click;
+end;
 
 procedure TTableGenForm.btnToExcelClick(Sender: TObject);
 var
@@ -81,6 +112,7 @@ var i,j,k:integer;
 begin
   //showmessage( inttostr( Length(memoInpCode.Text)) );
   j:=1;
+  isOk := false;
   StringGrid1.Cells[0,0] := 'Имя подпрограммы';
   StringGrid1.Cells[1,0] := 'Описание';
   StringGrid1.Cells[2,0] := 'Заголовок подпрограммы';

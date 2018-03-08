@@ -10,6 +10,7 @@ object TableGenForm: TTableGenForm
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  Menu = MainMenu1
   OldCreateOrder = False
   OnCanResize = FormCanResize
   OnCreate = FormCreate
@@ -83,5 +84,28 @@ object TableGenForm: TTableGenForm
   object SaveDialog1: TSaveDialog
     Left = 312
     Top = 168
+  end
+  object MainMenu1: TMainMenu
+    Left = 432
+    Top = 152
+    object mnFile: TMenuItem
+      Caption = #1060#1072#1081#1083
+      object mniConver: TMenuItem
+        Caption = #1055#1088#1077#1086#1073#1088#1072#1079#1086#1074#1072#1090#1100
+        OnClick = mniConverClick
+      end
+      object mnToExcel: TMenuItem
+        Caption = #1042' Excel'
+        OnClick = mnToExcelClick
+      end
+    end
+    object mnClear: TMenuItem
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1090#1077#1082#1089#1090#1086#1074#1086#1077' '#1087#1086#1083#1077
+      OnClick = mnClearClick
+    end
+    object mnSupport: TMenuItem
+      Caption = #1055#1086#1076#1076#1077#1088#1078#1072#1090#1100
+      OnClick = mnSupportClick
+    end
   end
 end
