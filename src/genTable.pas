@@ -88,19 +88,32 @@ begin
   StringGrid1.Cells[4,0] := 'Назначение параметра';
   for I := 0 to memoInpCode.Lines.Count-1 do
   begin
-    if pos('implementation', memoInpCode.Lines[i]) > 0 then
+    if (pos('implementation', AnsiLowerCase(memoInpCode.Lines[i])) > 0) or (pos('$APPTYPE CONSOLE', memoInpCode.Lines[i]) > 0) then
     begin
       isOk := true;
     end;
+    memoInpCode.Lines[i] := trim(memoInpCode.Lines[i]);
     b1 := pos('PROCEDURE',AnsiUpperCase(memoInpCode.Lines[i]));
-    b2 := pos('FUNCTION', memoInpCode.Lines[i]);
+    b2 := pos('FUNCTION', AnsiUpperCase(memoInpCode.Lines[i]));
+
     if isOk and
     ( b1 > 0)
     or
     (b2 > 0) then
-    begin
+    begin      
       curr:=  memoInpCode.Lines[i];
-      curr := trim(curr);
+
+      if (b1 > 1) or (b2 > 1) then
+      begin
+        if b1 = 0 then
+          k := b2
+        else
+          k := b1;
+
+        if pos('=', curr) < k then
+          continue; // Процедурный тип
+      end;
+      
       if (pos('(', curr) <> 0) and (pos(')', curr) = 0) then
       begin
         k:=1;
