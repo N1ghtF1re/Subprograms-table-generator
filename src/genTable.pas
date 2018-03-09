@@ -127,6 +127,7 @@ var i,j,k:integer;
     curr:string;
     b1, b2:integer;
     variable:string;
+    currvar:string;
 begin
   //showmessage( inttostr( Length(memoInpCode.Text)) );
   j:=1;
@@ -213,16 +214,10 @@ begin
           if variable[k] = ':' then
           begin
             //showmessage('lel');
-            StringGrid1.Cells[3,j] := Copy(variable,1,k-1);
-            if pos(variable,';') <> 0 then
-            begin
-              delete(variable, k, pos(';', variable));
-            end
-            else
-            begin
-              StringGrid1.Cells[4,j] := Copy(variable,k,pos(variable,')')-1);
-              delete(variable, 1, pos(variable,')')-1);
-            end;
+            currvar := trim(Copy(variable,1,k-1));
+            StringGrid1.Cells[3,j] := currvar;
+            if AnsiLowerCase(currvar) = 'sender' then
+              StringGrid1.Cells[4,j] := 'Объект, который сгенерировал событие';
           end;
           inc(k);
         end;
