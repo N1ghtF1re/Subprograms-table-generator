@@ -6,13 +6,13 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.StdCtrls,ComObj, pngimage,
   Vcl.ExtCtrls, Vcl.Menus, ShellAPI,SplashScreen, IdHTTP, IdBaseComponent,
-  IdComponent, IdTCPConnection, IdTCPClient, NewVersion;
+  IdComponent, IdTCPConnection, IdTCPClient, NewVersion, AI;
 
 type
   TTableGenForm = class(TForm)
     memoInpCode: TMemo;
     StringGrid1: TStringGrid;
-    btnToWord: TButton;
+    btnToExcel: TButton;
     btnGenTable: TButton;
     pnlBottom: TPanel;
     SaveDialog1: TSaveDialog;
@@ -24,7 +24,7 @@ type
     mnToExcel: TMenuItem;
     ImgIntro: TImage;
     IdHTTP1: TIdHTTP;
-    procedure btnToWordClick(Sender: TObject);
+    procedure btnToExcelClick(Sender: TObject);
     procedure btnGenTableClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
@@ -83,7 +83,7 @@ begin
   btnToExcel.Click;
 end;
 
-procedure TTableGenForm.btnToWordClick(Sender: TObject);
+procedure TTableGenForm.btnToExcelClick(Sender: TObject);
 var
  Word,WordTable: variant;
  Col, Row: Integer;
@@ -267,34 +267,7 @@ begin
 
             StringGrid1.Cells[3,j + shift] := currvar;
 
-            if trim(AnsiLowerCase(currvar)) = 'sender' then
-              StringGrid1.Cells[4,j + shift] := 'Объект, который сгенерировал событие';
-            if trim(AnsiLowerCase(currvar)) = 'name' then
-              StringGrid1.Cells[4,j + shift] := 'Имя'
-            else if pos('name', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Название';
-
-            if pos('head', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Голова';
-            if pos('fio', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'ФИО';
-            if pos('width', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Ширина';
-            if pos('height', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Высота';
-            if (pos('temp', AnsiLowerCase(currvar)) > 0) or (pos('tmp', AnsiLowerCase(currvar)) > 0) then
-              StringGrid1.Cells[4,j + shift] := 'Временная переменная';
-            if pos('curr', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Текущее значение';
-            if pos('flag', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Флаг';
-            if pos('col', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Колонка';
-            if pos('row', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Строка';
-            if pos('state', AnsiLowerCase(currvar)) > 0 then
-              StringGrid1.Cells[4,j + shift] := 'Статус';
-
+            AIVarDesc(StringGrid1, j, shift, currvar);
 
             if variable[k] = ':' then
             begin
@@ -328,32 +301,7 @@ begin
       //StringGrid1.Cells[3,j] := variable;
 
 
-      if pos('CLICK', AnsiUpperCase(curr)) > 0 then
-        StringGrid1.Cells[1,j] := 'Обработка клика';
-      if pos('RESIZE', AnsiUpperCase(curr)) > 0 then
-        StringGrid1.Cells[1,j] := 'Обработка изменения размера';
-      if pos('FORMCREATE', AnsiUpperCase(curr)) > 0 then
-        StringGrid1.Cells[1,j] := 'Событие при создании формы';
-      if pos('MOUSE', AnsiUpperCase(curr)) > 0 then
-        StringGrid1.Cells[1,j] := 'Обработка нажатие мыши';
-      if ((pos('FILE', AnsiUpperCase(curr)) > 0)
-          and
-          (pos('READ', AnsiUpperCase(curr)) > 0)) then
-         StringGrid1.Cells[1,j] := 'Чтение файла';
-
-      if ((pos('FILE', AnsiUpperCase(curr)) > 0)
-          and
-          (pos('SAVE', AnsiUpperCase(curr)) > 0)) then
-         StringGrid1.Cells[1,j] := 'Сохранение файла';
-
-      if ((pos('LIST', AnsiUpperCase(curr)) > 0)
-          and
-          (pos('CREATE', AnsiUpperCase(curr)) > 0)) then
-         StringGrid1.Cells[1,j] := 'Создание списка';
-      if ((pos('LIST', AnsiUpperCase(curr)) > 0)
-          and
-          (pos('INSERT', AnsiUpperCase(curr)) > 0)) then
-         StringGrid1.Cells[1,j] := 'Вставить элемент в список';
+      AIProcDesc(StringGrid1, j, curr);
 
       k := 1;
       tmp := #0;
