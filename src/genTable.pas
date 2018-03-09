@@ -109,6 +109,7 @@ begin
         if i = 1 then
           WordTable.Cell(1, j).Range.Font.Bold:=True;
         WordTable.Cell(I, j).Range.Text:=StringGrid1.cells[j-1,i-1];
+
         //ShowMessage(StringGrid1.cells[j-1,i-1]);
       end;
 
@@ -116,12 +117,24 @@ begin
     i := 1;
     while (i < row) do
     begin
+      if trim(String(WordTable.Cell(I, 1).Range.Text)) = '' then
+      begin
+        j := i;
+        while  trim(String(WordTable.Cell(j, 1).Range.Text)) = '' do
+        begin
+          if j = row then
+            break;
+          inc(j);
 
-
-      asm
-        inc i
+        end;
+        WordTable.Cell(i-1,1).Merge(WordTable.Cell(j-1,1));
+        WordTable.Cell(i-1,2).Merge(WordTable.Cell(j-1,2));
+        WordTable.Cell(i-1,3).Merge(WordTable.Cell(j-1,3));
+        i:=j-1;
       end;
+      inc(i);
     end;
+
 
     if SaveDialog1.Execute then
     begin
@@ -141,6 +154,7 @@ var i,j,k:integer;
     variable:string;
     currvar:string;
     shift:byte;
+    tmp:string;
 begin
   //showmessage( inttostr( Length(memoInpCode.Text)) );
   j:=1;
@@ -274,6 +288,12 @@ begin
               StringGrid1.Cells[4,j + shift] := 'Текущее значение';
             if pos('flag', AnsiLowerCase(currvar)) > 0 then
               StringGrid1.Cells[4,j + shift] := 'Флаг';
+            if pos('col', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Колонка';
+            if pos('row', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Строка';
+            if pos('state', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Статус';
 
 
             if variable[k] = ':' then
@@ -307,6 +327,7 @@ begin
       StringGrid1.Cells[0,j] := curr;
       //StringGrid1.Cells[3,j] := variable;
 
+
       if pos('CLICK', AnsiUpperCase(curr)) > 0 then
         StringGrid1.Cells[1,j] := 'Обработка клика';
       if pos('RESIZE', AnsiUpperCase(curr)) > 0 then
@@ -334,6 +355,37 @@ begin
           (pos('INSERT', AnsiUpperCase(curr)) > 0)) then
          StringGrid1.Cells[1,j] := 'Вставить элемент в список';
 
+      k := 1;
+      tmp := #0;
+      while trim(memoInpCode.Lines[i-k]) = '' do
+        inc(k);
+      if pos('}', memoInpCode.Lines[i-k]) > 0 then
+      begin
+        if  (pos('{', memoInpCode.Lines[i-k]) > 0) then
+        begin
+            tmp := trim(memoInpCode.Lines[i-k]);
+        end
+        else
+        begin
+          while(pos('{', memoInpCode.Lines[i-k]) = 0) do
+            inc(k);
+          while pos('}', memoInpCode.Lines[i-k]) <> 0 do
+            tmp := tmp + memoInpCode.Lines[i-k];
+          tmp := tmp + memoInpCode.Lines[i-k];
+        end;
+
+        delete(tmp, pos('{', tmp),1);
+        delete(tmp, pos('}', tmp),1);
+        tmp:=trim(tmp);
+        StringGrid1.Cells[1,j] := tmp;
+      end else if trim(memoInpCode.Lines[i-k])[1] = '/' then
+      begin
+        tmp := memoInpCode.Lines[i-k];
+        delete(tmp, pos('/', tmp),2);
+        tmp:=trim(tmp);
+        StringGrid1.Cells[1,j] := tmp;
+
+      end;
 
 
       j:=j+1+shift;
@@ -371,7 +423,7 @@ begin
   try
     HTMLtext := IDHttp1.Get('http://pankratiew.info/TPG_vers.brakh');
   except on E: Exception do
-        ShowMessage(':c')
+    ;
   end;
   Sleep(2000);
   Splash.Close;
