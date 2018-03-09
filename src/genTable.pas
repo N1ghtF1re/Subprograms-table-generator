@@ -12,7 +12,7 @@ type
   TTableGenForm = class(TForm)
     memoInpCode: TMemo;
     StringGrid1: TStringGrid;
-    btnToExcel: TButton;
+    btnToWord: TButton;
     btnGenTable: TButton;
     pnlBottom: TPanel;
     SaveDialog1: TSaveDialog;
@@ -24,7 +24,7 @@ type
     mnToExcel: TMenuItem;
     ImgIntro: TImage;
     IdHTTP1: TIdHTTP;
-    procedure btnToExcelClick(Sender: TObject);
+    procedure btnToWordClick(Sender: TObject);
     procedure btnGenTableClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
@@ -83,7 +83,7 @@ begin
   btnToExcel.Click;
 end;
 
-procedure TTableGenForm.btnToExcelClick(Sender: TObject);
+procedure TTableGenForm.btnToWordClick(Sender: TObject);
 var
  Word,WordTable: variant;
  Col, Row: Integer;
