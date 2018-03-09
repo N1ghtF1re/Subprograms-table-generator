@@ -101,7 +101,7 @@ begin
 
     WordTable:=Word.ActiveDocument.Tables.Item(1);
     WordTable.Style:='Сетка таблицы';
-    ShowMessage( IntToStr(row) + ' ' + IntToStr(col) );
+    //ShowMessage( IntToStr(row) + ' ' + IntToStr(col) );
     For i:=1 To row Do
     Begin
       For j:=1 To col Do
@@ -113,9 +113,21 @@ begin
       end;
 
     End;
+    i := 1;
+    while (i < row) do
+    begin
+
+
+      asm
+        inc i
+      end;
+    end;
+
     if SaveDialog1.Execute then
-    Word.ActiveDocument.SaveAs(SaveDialog1.FileName);
-    ShowMessage('Сохранено');
+    begin
+      Word.ActiveDocument.SaveAs(SaveDialog1.FileName);
+      ShowMessage('Сохранено');
+    end;
   finally
     Word.Application.Quit;
     Word := unassigned;
@@ -128,6 +140,7 @@ var i,j,k:integer;
     b1, b2:integer;
     variable:string;
     currvar:string;
+    shift:byte;
 begin
   //showmessage( inttostr( Length(memoInpCode.Text)) );
   j:=1;
@@ -167,7 +180,20 @@ begin
         if pos('=', curr) < k then
           continue; // Процедурный тип
       end;
-      
+
+      if pos(';', curr) = 0 then
+      begin
+        //ShowMessage('l3l');
+        k:=1;
+        while (pos(';', curr) = 0) do
+        begin
+          curr := curr + memoInpCode.Lines[i+k];
+          inc(k);
+        end;
+      end;
+
+
+
       if (pos('(', curr) <> 0) and (pos(')', curr) = 0) then
       begin
         k:=1;
@@ -176,7 +202,6 @@ begin
           curr := curr + memoInpCode.Lines[i+k];
           inc(k);
         end;
-
       end;
 
       StringGrid1.Cells[2,j] := curr;
@@ -190,37 +215,92 @@ begin
         delete(curr,1,b1+9);
       end;
       curr := trim(curr);
+
       // Если при задании процедуры указывается класс, убираем его
       if (UpperCase(curr[1]) = 'T') and (pos('.', curr) <> 0) then
       begin
         delete(curr,1, pos('.', curr));
       end;
       // Удаляем
+      shift := 0;
       if pos('(', curr) <> 0 then
       begin
         variable := copy(curr, pos('(', curr)+1, length(curr));
         curr := copy(curr,0, pos('(', curr)-1);
 
-        k := 1;
         while pos('var', variable) > 0 do
           delete(variable, pos('var', variable), 4);
         while pos('const', variable) > 0 do
           delete(variable, pos('const', variable), 6);
         while pos('out', variable) > 0 do
           delete(variable, pos('out', variable), 4);
+        {while pos(':', variable) > 0 do
+        begin
+          if pos(';', variable) > 0 then
+            delete(variable, pos(':', variable), length(variable) - pos(';', variable));
+          if pos(')', variable) > 0 then
+            delete(variable, pos(':', variable), length(variable) - pos(')', variable));
 
+        end; }
+        k := 1;
+        if pos(')', variable) > 0 then
         while(variable[k] <> ')') do
         begin
-          if variable[k] = ':' then
+          if (variable[k] = ':') or (variable[k] = ',') then
           begin
-            //showmessage('lel');
+            //showmessage(variable + ' lel');
             currvar := trim(Copy(variable,1,k-1));
-            StringGrid1.Cells[3,j] := currvar;
-            if AnsiLowerCase(currvar) = 'sender' then
-              StringGrid1.Cells[4,j] := 'Объект, который сгенерировал событие';
+
+            StringGrid1.Cells[3,j + shift] := currvar;
+
+            if trim(AnsiLowerCase(currvar)) = 'sender' then
+              StringGrid1.Cells[4,j + shift] := 'Объект, который сгенерировал событие';
+            if trim(AnsiLowerCase(currvar)) = 'name' then
+              StringGrid1.Cells[4,j + shift] := 'Имя'
+            else if pos('name', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Название';
+
+            if pos('head', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Голова';
+            if pos('fio', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'ФИО';
+            if pos('width', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Ширина';
+            if pos('height', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Высота';
+            if (pos('temp', AnsiLowerCase(currvar)) > 0) or (pos('tmp', AnsiLowerCase(currvar)) > 0) then
+              StringGrid1.Cells[4,j + shift] := 'Временная переменная';
+            if pos('curr', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Текущее значение';
+            if pos('flag', AnsiLowerCase(currvar)) > 0 then
+              StringGrid1.Cells[4,j + shift] := 'Флаг';
+
+
+            if variable[k] = ':' then
+            begin
+              if pos(';', variable) < pos(')', variable) then
+                delete(variable,k, pos(';', variable) - k)
+              else
+              begin
+                delete(variable,k, pos(')', variable)-1 - k) ;
+                break;
+              end;
+
+            end;
+
+
+
+            delete(variable,1,k);
+            k := 1;
+
+            inc(shift);
+
+            stringGrid1.RowCount := StringGrid1.RowCount + 1;
           end;
           inc(k);
         end;
+        currvar := trim(Copy(variable,1,k-1));
+            StringGrid1.Cells[3,j + shift] := currvar;
       end;
 
 
@@ -229,13 +309,35 @@ begin
 
       if pos('CLICK', AnsiUpperCase(curr)) > 0 then
         StringGrid1.Cells[1,j] := 'Обработка клика';
-      if pos('CREATE', AnsiUpperCase(curr)) > 0 then
+      if pos('RESIZE', AnsiUpperCase(curr)) > 0 then
+        StringGrid1.Cells[1,j] := 'Обработка изменения размера';
+      if pos('FORMCREATE', AnsiUpperCase(curr)) > 0 then
         StringGrid1.Cells[1,j] := 'Событие при создании формы';
       if pos('MOUSE', AnsiUpperCase(curr)) > 0 then
         StringGrid1.Cells[1,j] := 'Обработка нажатие мыши';
+      if ((pos('FILE', AnsiUpperCase(curr)) > 0)
+          and
+          (pos('READ', AnsiUpperCase(curr)) > 0)) then
+         StringGrid1.Cells[1,j] := 'Чтение файла';
+
+      if ((pos('FILE', AnsiUpperCase(curr)) > 0)
+          and
+          (pos('SAVE', AnsiUpperCase(curr)) > 0)) then
+         StringGrid1.Cells[1,j] := 'Сохранение файла';
+
+      if ((pos('LIST', AnsiUpperCase(curr)) > 0)
+          and
+          (pos('CREATE', AnsiUpperCase(curr)) > 0)) then
+         StringGrid1.Cells[1,j] := 'Создание списка';
+      if ((pos('LIST', AnsiUpperCase(curr)) > 0)
+          and
+          (pos('INSERT', AnsiUpperCase(curr)) > 0)) then
+         StringGrid1.Cells[1,j] := 'Вставить элемент в список';
 
 
-      inc(j);
+
+      j:=j+1+shift;
+      //ShowMessage( IntToStr(j) + intToStr(shift));
       stringGrid1.RowCount := j;
     end;
 
