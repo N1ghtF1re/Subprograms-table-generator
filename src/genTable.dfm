@@ -2,7 +2,7 @@ object TableGenForm: TTableGenForm
   Left = 0
   Top = 0
   Caption = #1043#1077#1085#1077#1088#1072#1094#1080#1103' '#1090#1072#1073#1083#1080#1094#1099' '#1087#1086#1076#1087#1088#1086#1075#1088#1072#1084#1084
-  ClientHeight = 389
+  ClientHeight = 349
   ClientWidth = 715
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -3127,7 +3127,7 @@ object TableGenForm: TTableGenForm
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 308
+    Top = 268
     Width = 715
     Height = 81
     Align = alBottom

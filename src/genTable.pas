@@ -50,7 +50,7 @@ implementation
 {$R *.dfm}
 
 const
-  EXCEL_FILE_EXT = '.xlsx';
+  EXCEL_FILE_EXT = '.docx';
 
 function TTableGenForm.GetExcelFileName: String;
 begin
@@ -85,27 +85,40 @@ end;
 
 procedure TTableGenForm.btnToExcelClick(Sender: TObject);
 var
- ExcelApp, Sheet: variant;
- Col, Row: Word;
+ Word,WordTable: variant;
+ Col, Row: Integer;
+ i,j:integer;
 begin
-  // Сохраняем все в Excel файл!
-  ExcelApp := CreateOleObject('Excel.Application');
+  col := StringGrid1.ColCount;
+  row := StringGrid1.RowCount;
+
+  // Сохраняем все в Word файл!
+  Word:=CreateOleObject('Word.Application');
   try
-    ExcelApp.Visible := false;
+    Word.Documents.Add;
+    Word.ActiveDocument.Tables.Add(Word.ActiveDocument.Range,
+    row,col);
 
-    ExcelApp.Workbooks.Add;
-    Sheet := ExcelApp.ActiveWorkbook.Worksheets[1];
+    WordTable:=Word.ActiveDocument.Tables.Item(1);
+    WordTable.Style:='Сетка таблицы';
+    ShowMessage( IntToStr(row) + ' ' + IntToStr(col) );
+    For i:=1 To row Do
+    Begin
+      For j:=1 To col Do
+      begin
+        if i = 1 then
+          WordTable.Cell(1, j).Range.Font.Bold:=True;
+        WordTable.Cell(I, j).Range.Text:=StringGrid1.cells[j-1,i-1];
+        //ShowMessage(StringGrid1.cells[j-1,i-1]);
+      end;
 
-    for Col := 0 to StringGrid1.ColCount - 1 do
-      for Row := 0 to StringGrid1.RowCount - 1 do
-        Sheet.Cells[Row + 1, Col + 1] := StringGrid1.Cells[Col, Row];
-
-    ExcelApp.ActiveWorkbook.SaveAs(GetExcelFileName);
-
+    End;
+    if SaveDialog1.Execute then
+    Word.ActiveDocument.SaveAs(SaveDialog1.FileName);
     ShowMessage('Сохранено');
   finally
-    ExcelApp.Application.Quit;
-    ExcelApp := unassigned;
+    Word.Application.Quit;
+    Word := unassigned;
   end;
 end;
 
@@ -113,6 +126,7 @@ procedure TTableGenForm.btnGenTableClick(Sender: TObject);
 var i,j,k:integer;
     curr:string;
     b1, b2:integer;
+    variable:string;
 begin
   //showmessage( inttostr( Length(memoInpCode.Text)) );
   j:=1;
@@ -128,6 +142,9 @@ begin
     begin
       isOk := true;
     end;
+    if (pos('interface', AnsiLowerCase(memoInpCode.Lines[i])) > 0) then
+      isOk := false;
+
     curr := trim(memoInpCode.Lines[i]);
     b1 := pos('PROCEDURE',AnsiUpperCase(curr));
     b2 := pos('FUNCTION', AnsiUpperCase(curr));
@@ -179,8 +196,41 @@ begin
       end;
       // Удаляем
       if pos('(', curr) <> 0 then
+      begin
+        variable := copy(curr, pos('(', curr)+1, length(curr));
         curr := copy(curr,0, pos('(', curr)-1);
+
+        k := 1;
+        while pos('var', variable) > 0 do
+          delete(variable, pos('var', variable), 4);
+        while pos('const', variable) > 0 do
+          delete(variable, pos('const', variable), 6);
+        while pos('out', variable) > 0 do
+          delete(variable, pos('out', variable), 4);
+
+        while(variable[k] <> ')') do
+        begin
+          if variable[k] = ':' then
+          begin
+            //showmessage('lel');
+            StringGrid1.Cells[3,j] := Copy(variable,1,k-1);
+            if pos(variable,';') <> 0 then
+            begin
+              delete(variable, k, pos(';', variable));
+            end
+            else
+            begin
+              StringGrid1.Cells[4,j] := Copy(variable,k,pos(variable,')')-1);
+              delete(variable, 1, pos(variable,')')-1);
+            end;
+          end;
+          inc(k);
+        end;
+      end;
+
+
       StringGrid1.Cells[0,j] := curr;
+      //StringGrid1.Cells[3,j] := variable;
 
       if pos('CLICK', AnsiUpperCase(curr)) > 0 then
         StringGrid1.Cells[1,j] := 'Обработка клика';
@@ -204,7 +254,7 @@ begin
   memoInpCode.Width := TableGenForm.Width div 2;
   StringGrid1.Left := memoInpCode.Width;
   StringGrid1.Width := TableGenForm.Width div 2 - 15;
-  StringGrid1.DefaultColWidth := StringGrid1.Width div 3 - 12;
+  StringGrid1.DefaultColWidth := StringGrid1.Width div 5 - 12;
   memoinpcode.Height := TableGenForm.Height - pnlBottom.Height - 20;
   StringGrid1.Height := memoInpCode.Height;
   btnGenTable.Width := memoInpCode.Width;
@@ -221,7 +271,7 @@ begin
   png:= TPngImage(ImgIntro.Picture);
   Splash := TSplash.Create(png);
   Splash.Show(true);
-  HTMLtext := IDHttp1.Get('http://pankratiew.info/TPG_vers.brakh');
+  // HTMLtext := IDHttp1.Get('http://pankratiew.info/TPG_vers.brakh');
   Sleep(2000);
   Splash.Close;
 
