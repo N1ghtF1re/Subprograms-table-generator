@@ -2,7 +2,7 @@ Subprograms table generator
 --------------------
 This is a real revolution in the world of writing reports!
 
-Tired of manually filling the table with subprograms, spending a huge amount of time on this? Do you just fill in the description? This program is exactly for you!
+Tired of manually filling the table with subprograms, spending a huge amount of time on this? You want only to fill in the description? This program is exactly for you!
 
 It compiles a table of subprograms and its parameters according to your code. Sounds like a fairy tale? And here not!
 
@@ -15,15 +15,7 @@ How to use
 + Paste your code into the text box on the left. 
 + Then click "Convert". 
 + Make sure the data in the table is correct. 
-+ Click the "To Word" button and select in the dialog box where to save the file.
-+ Done! Now fill in the missing information and insert the table into your report!
-
-How to use
---------------------
-+ Paste your code into the text box on the left. 
-+ Then click "Convert". 
-+ Make sure the data in the table is correct. 
-+ Click the "To Word" button and select in the dialog box where to save the file.
++ Click the "To Word" button and select where to save the file.
 + Done! Now fill in the missing information and insert the table into your report!
 
 Screens
