@@ -20,5 +20,5 @@ How to use
 
 Screens
 --------------------
-![Screen 1](https://github.com/N1ghtF1re/Subprograms-table-generator/blob/master/screens/1.PNG)
-![Screen 2](https://github.com/N1ghtF1re/Subprograms-table-generator/blob/master/screens/2.PNG)
+![Screen 1](https://github.com/N1ghtF1re/Subprograms-table-generator/blob/master/screens/Screen1.PNG)
+![Screen 2](https://github.com/N1ghtF1re/Subprograms-table-generator/blob/master/screens/Screen2.PNG)
