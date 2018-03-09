@@ -368,7 +368,11 @@ begin
   png:= TPngImage(ImgIntro.Picture);
   Splash := TSplash.Create(png);
   Splash.Show(true);
-  // HTMLtext := IDHttp1.Get('http://pankratiew.info/TPG_vers.brakh');
+  try
+    HTMLtext := IDHttp1.Get('http://pankratiew.info/TPG_vers.brakh');
+  except on E: Exception do
+        ShowMessage(':c')
+  end;
   Sleep(2000);
   Splash.Close;
 
