@@ -3100,6 +3100,7 @@ object TableGenForm: TTableGenForm
     Height = 368
     ScrollBars = ssVertical
     TabOrder = 0
+    OnKeyPress = memoInpCodeKeyPress
   end
   object StringGrid1: TStringGrid
     Left = 352

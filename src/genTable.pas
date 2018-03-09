@@ -34,6 +34,7 @@ type
     procedure mnClearClick(Sender: TObject);
     procedure mnSupportClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure memoInpCodeKeyPress(Sender: TObject; var Key: Char);
   private
     splash: TSplash;
       function GetExcelFileName: String;
@@ -61,6 +62,15 @@ begin
     Result := Result + EXCEL_FILE_EXT;
 end;
 
+
+procedure TTableGenForm.memoInpCodeKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = ^A then
+  begin
+    (Sender as TMemo).SelectAll;
+    Key := #0;
+  end;
+end;
 
 procedure TTableGenForm.mnClearClick(Sender: TObject);
 begin
@@ -381,7 +391,7 @@ end;
 
 procedure TTableGenForm.FormShow(Sender: TObject);
 begin
-  version:='1.1';
+  version:='1.2';
   if ( (Pos(version,HTMLtext)<>0) or (HTMLtext = ''))  then
   begin
 
